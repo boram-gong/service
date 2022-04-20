@@ -1,4 +1,4 @@
-package common
+package body
 
 var (
 	SuccessResp = &RespHead{
