@@ -6,6 +6,7 @@ import (
 	"github.com/boram-gong/service/svc/endpoint"
 	svc_http "github.com/boram-gong/service/svc/http"
 	"io"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -53,11 +54,10 @@ func (s *Service) Run() {
 	go func() {
 		ch <- s.Server.Run(":" + s.Port)
 	}()
-
-	fmt.Printf("closed:%s", <-ch)
+	log.Printf("closed:%s \n", <-ch)
 }
 
-func (s *Service) AddHTTPHandler(httpMethod, relativePath string, f endpoint.Endpoint, decode func(c *gin.Context) (interface{}, error)) {
+func (s *Service) AddHTTPHandler(httpMethod, relativePath string, f endpoint.Endpoint, decode svc_http.DecodeRequestFuncFromGin) {
 	// json-adapter
 	s.Server.Handle(httpMethod, relativePath, func(c *gin.Context) {
 		svc_http.NewServer(
